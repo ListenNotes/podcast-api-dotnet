@@ -17,7 +17,7 @@ namespace PodcastAPI
 
             userAgent = $"podcasts-api-dotnet {version}";
 
-            var prodMode = !string.IsNullOrWhiteSpace(apiKey) && apiKey.Length > 0;
+            var prodMode = !string.IsNullOrWhiteSpace(apiKey);
 
             restClient = new RestClient(prodMode ? baseUrlProd : baseUrlTest);
 
