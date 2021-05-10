@@ -1,9 +1,8 @@
-﻿using PodcastAPI.Client;
-using RestSharp;
+﻿using RestSharp;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ListenNotes.PodcastApiClient
+namespace PodcastAPI
 {
     public sealed class Client
     {

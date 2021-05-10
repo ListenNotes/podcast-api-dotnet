@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ListenNotes.PodcastApiClient
+namespace PodcastAPI
 {
     public class Sample
     {

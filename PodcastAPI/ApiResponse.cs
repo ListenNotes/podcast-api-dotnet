@@ -2,7 +2,7 @@
 using RestSharp;
 using System.Linq;
 
-namespace PodcastAPI.Client
+namespace PodcastAPI
 {
     public sealed class ApiResponse
     {
