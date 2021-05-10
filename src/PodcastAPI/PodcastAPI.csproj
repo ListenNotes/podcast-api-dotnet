@@ -1,16 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <StartupObject>PodcastAPI.Sample</StartupObject>
-    <RootNamespace>PodcastAPI</RootNamespace>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <AssemblyName>PodcastAPI</AssemblyName>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PodcastAPI.Client\PodcastAPI.Client.csproj" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="RestSharp" Version="106.11.7" />
   </ItemGroup>
 
 </Project>

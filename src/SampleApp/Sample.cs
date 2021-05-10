@@ -20,9 +20,15 @@ namespace PodcastAPI
 
                 var freeQuota = result.GetFreeQuota();
 
+                Console.WriteLine($"Free Quota: {freeQuota}");
+
                 var usage = result.GetUsage();
 
+                Console.WriteLine($"Usage: {usage}");
+
                 var nextBillingDate = result.GetNextBillingDate();
+
+                Console.WriteLine($"Next Billing Date: {nextBillingDate}");
 
                 Console.Read();
             }
@@ -31,7 +37,7 @@ namespace PodcastAPI
                 Console.WriteLine(ex);
             }
 
-            Console.Read(); 
+            Console.Read();
         }
     }
 }
