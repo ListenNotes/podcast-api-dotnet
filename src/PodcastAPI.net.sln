@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp", "SampleApp\SampleApp.csproj", "{41A0A0D2-6005-4795-A7B7-AAC6ED34C8D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp", "SampleApp\SampleApp.csproj", "{41A0A0D2-6005-4795-A7B7-AAC6ED34C8D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PodcastAPI", "PodcastAPI\PodcastAPI.csproj", "{332CE25D-85B1-44B0-96DD-FA2CC6E91452}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PodcastAPI", "PodcastAPI\PodcastAPI.csproj", "{332CE25D-85B1-44B0-96DD-FA2CC6E91452}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
