@@ -39,7 +39,10 @@ namespace PodcastAPI
         {
             var request = new RestRequest("search", Method.GET);
 
-            request.AddJsonBody(parameters);
+            foreach (var parameter in parameters)
+            {
+                request.AddQueryParameter(parameter.Key, parameter.Value);
+            }
 
             var response = await restClient.ExecuteAsync(request);
 
