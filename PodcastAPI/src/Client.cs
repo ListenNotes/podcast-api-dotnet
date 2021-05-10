@@ -11,24 +11,13 @@ namespace PodcastAPI
         private readonly string userAgent;
         private readonly IRestClient restClient;
 
-        public Client()
+        public Client(string apiKey = null)
         {
             var version = GetType().Assembly.GetName().Version.ToString();
 
             userAgent = $"podcasts-api-dotnet {version}";
 
-            restClient = new RestClient(baseUrlTest);
-
-            restClient.AddDefaultHeader("User-Agent", userAgent);
-        }
-
-        public Client(string apiKey)
-        {
-            var version = GetType().Assembly.GetName().Version.ToString();
-
-            this.userAgent = $"podcasts-api-dotnet {version}";
-
-            this.restClient = new RestClient(baseUrlProd);
+            restClient = new RestClient(string.IsNullOrWhiteSpace(apiKey) ? baseUrlTest : baseUrlProd);
 
             restClient.AddDefaultHeader("X-ListenAPI-Key", apiKey);
 
