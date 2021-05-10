@@ -6,8 +6,8 @@ namespace PodcastAPI
 {
     public sealed class Client
     {
-        private readonly string baseUrlTest = "https://listen-api-test.listennotes.com/api/v2";
-        private readonly string baseUrlProd = "https://listen-api.listennotes.com/api/v2";
+        private readonly string BASE_URL_TEST = "https://listen-api-test.listennotes.com/api/v2";
+        private readonly string BASE_URL_PROD = "https://listen-api.listennotes.com/api/v2";
         private readonly string userAgent;
         private readonly IRestClient restClient;
 
@@ -19,7 +19,7 @@ namespace PodcastAPI
 
             var prodMode = !string.IsNullOrWhiteSpace(apiKey);
 
-            restClient = new RestClient(prodMode ? baseUrlProd : baseUrlTest);
+            restClient = new RestClient(prodMode ? BASE_URL_PROD : BASE_URL_TEST);
 
             if (prodMode)
             {
