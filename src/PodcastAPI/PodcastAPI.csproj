@@ -3,15 +3,14 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <StartupObject></StartupObject>
+    <StartupObject>PodcastAPI.Sample</StartupObject>
     <RootNamespace>PodcastAPI</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyName>PodcastAPI</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="RestSharp" Version="106.11.7" />
+    <ProjectReference Include="..\PodcastAPI.Client\PodcastAPI.Client.csproj" />
   </ItemGroup>
 
 </Project>
