@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <StartupObject></StartupObject>
-    <RootNamespace>ListenNotes.PodcastApiClient</RootNamespace>
+    <RootNamespace>PodcastAPI</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyName>PodcastAPI</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
