@@ -5,7 +5,7 @@
     <OutputType>Exe</OutputType>
     <StartupObject>PodcastAPI.Sample</StartupObject>
     <RootNamespace>PodcastAPI</RootNamespace>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <AssemblyName>PodcastAPI</AssemblyName>
   </PropertyGroup>
 
