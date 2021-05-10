@@ -6,12 +6,12 @@ namespace PodcastAPI
 {
     public sealed class ApiResponse
     {
-        private readonly IRestResponse Response;
+        private readonly IRestResponse response;
         private readonly string jsonString;
 
         public ApiResponse(string jsonString, IRestResponse response)
         {
-            Response = response;
+            this.response = response;
             this.jsonString = jsonString;
         }
 
@@ -28,7 +28,7 @@ namespace PodcastAPI
         public int GetFreeQuota()
         {
             var name = "x-listenapi-freequota";
-            var headerField = Response.Headers.FirstOrDefault(h => h.Name.Equals(name)).Value?.ToString();
+            var headerField = response.Headers.FirstOrDefault(h => h.Name.Equals(name)).Value?.ToString();
 
             if (headerField != null && int.TryParse(headerField, out int result))
             {
@@ -41,7 +41,7 @@ namespace PodcastAPI
         public int GetUsage()
         {
             var name = "x-listenapi-usage";
-            var headerField = Response.Headers.FirstOrDefault(h => h.Name.Equals(name)).Value?.ToString();
+            var headerField = response.Headers.FirstOrDefault(h => h.Name.Equals(name)).Value?.ToString();
 
             if (headerField != null && int.TryParse(headerField, out int result))
             {
@@ -54,7 +54,7 @@ namespace PodcastAPI
         public string GetNextBillingDate()
         {
             var name = "x-listenapi-nextbillingdate";
-            var headerField = Response.Headers.FirstOrDefault(h => h.Name.Equals(name));
+            var headerField = response.Headers.FirstOrDefault(h => h.Name.Equals(name));
 
             return headerField?.Value?.ToString();
         }
