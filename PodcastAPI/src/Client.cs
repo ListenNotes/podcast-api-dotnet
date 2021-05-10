@@ -17,11 +17,11 @@ namespace PodcastAPI
 
             userAgent = $"podcasts-api-dotnet {version}";
 
-            var testMode = !string.IsNullOrWhiteSpace(apiKey) && apiKey.Length > 0;
+            var prodMode = !string.IsNullOrWhiteSpace(apiKey) && apiKey.Length > 0;
 
-            restClient = new RestClient(!testMode ? baseUrlProd : baseUrlTest);
+            restClient = new RestClient(prodMode ? baseUrlProd : baseUrlTest);
 
-            if (!testMode)
+            if (prodMode)
             {
                 restClient.AddDefaultHeader("X-ListenAPI-Key", apiKey);
             }
