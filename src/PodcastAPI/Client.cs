@@ -39,45 +39,31 @@ namespace PodcastAPI
 
         private async Task<ApiResponse> Get(string url, IDictionary<string, string> queryParameters)
         {
-            try
+            var request = new RestRequest(url, Method.GET);
+
+            foreach (var parameter in queryParameters)
             {
-                var request = new RestRequest(url, Method.GET);
-
-                foreach (var parameter in queryParameters)
-                {
-                    request.AddQueryParameter(parameter.Key, parameter.Value);
-                }
-
-                var response = await restClient.ExecuteAsync(request);
-
-                var result = new ApiResponse(response.Content, response);
-
-                return result;
+                request.AddQueryParameter(parameter.Key, parameter.Value);
             }
-            catch (Exception ex)
-            {
-                throw new ListenApiException(ex.Message, ex);
-            }
+
+            var response = await restClient.ExecuteAsync(request);
+
+            var result = new ApiResponse(response.Content, response);
+
+            return result;
         }
 
         private async Task<ApiResponse> Post(string url, IDictionary<string, string> bodyParameters)
         {
-            try
-            {
-                var request = new RestRequest(url, Method.POST);
+            var request = new RestRequest(url, Method.POST);
 
-                request.AddJsonBody(bodyParameters);
+            request.AddJsonBody(bodyParameters);
 
-                var response = await restClient.ExecuteAsync(request);
+            var response = await restClient.ExecuteAsync(request);
 
-                var result = new ApiResponse(response.Content, response);
+            var result = new ApiResponse(response.Content, response);
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new ListenApiException(ex.Message, ex);
-            }
+            return result;
         }
     }
 }
