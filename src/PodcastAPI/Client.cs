@@ -82,6 +82,8 @@ namespace PodcastAPI
                     throw new NotFoundException("Endpoint not exist, or podcast / episode not exist.");
                 case 400:
                     throw new InvalidRequestException("Something wrong on your end (client side errors), e.g., missing required parameters.");
+                case 0:
+                    throw new ApiConnectionException("Failed to connect to Listen API servers.");
             }
 
             if (status >= 500)
