@@ -52,6 +52,16 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
+        public void Client_ShouldHave30SecondDefaultTimeout()
+        {
+            // Arrange & Act
+            var client = new Client();
+
+            // Assert
+            Assert.AreEqual(client.restClient.Timeout, 30000);
+        }
+
+        [TestMethod]
         public void Client_SearchMockDataShouldExist()
         {
             // Arrange

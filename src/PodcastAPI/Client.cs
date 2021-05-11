@@ -28,6 +28,9 @@ namespace PodcastAPI
                 restClient.AddDefaultHeader("X-ListenAPI-Key", apiKey);
             }
 
+            // default is 30 seconds
+            restClient.Timeout = 30000;
+
             restClient.AddDefaultHeader("User-Agent", userAgent);
         }
 
