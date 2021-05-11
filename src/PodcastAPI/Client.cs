@@ -11,7 +11,7 @@ namespace PodcastAPI
         public readonly string BASE_URL_TEST = "https://listen-api-test.listennotes.com/api/v2";
         public readonly string BASE_URL_PROD = "https://listen-api.listennotes.com/api/v2";
         public readonly IRestClient restClient;
-        private readonly string userAgent;
+        public readonly string userAgent;
 
         public Client(string apiKey = null)
         {
@@ -48,6 +48,8 @@ namespace PodcastAPI
 
             var response = await restClient.ExecuteAsync(request);
 
+            ProcessStatus((int)response.StatusCode);
+
             var result = new ApiResponse(response.Content, response);
 
             return result;
@@ -61,9 +63,31 @@ namespace PodcastAPI
 
             var response = await restClient.ExecuteAsync(request);
 
+            ProcessStatus((int)response.StatusCode);
+
             var result = new ApiResponse(response.Content, response);
 
             return result;
+        }
+
+        private void ProcessStatus(int status)
+        {
+            switch (status)
+            {
+                case 401:
+                    throw new AuthenticationException("Wrong api key or your account is suspended");
+                case 429:
+                    throw new RateLimitException("You use FREE plan and you exceed the quota limit.");
+                case 404:
+                    throw new NotFoundException("Endpoint not exist, or podcast / episode not exist.");
+                case 400:
+                    throw new InvalidRequestException("Something wrong on your end (client side errors), e.g., missing required parameters.");
+            }
+
+            if (status >= 500)
+            {
+                throw new ListenApiException("Error on our end (unexpected server errors)");
+            }
         }
     }
 }

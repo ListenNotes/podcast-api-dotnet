@@ -6,7 +6,7 @@ namespace PodcastAPI
 {
     public sealed class ApiResponse
     {
-        private readonly IRestResponse response;
+        public readonly IRestResponse response;
         private readonly string jsonString;
 
         public ApiResponse(string jsonString, IRestResponse response)
