@@ -1,4 +1,6 @@
-﻿using RestSharp;
+﻿using PodcastAPI.Exceptions;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,10 +8,10 @@ namespace PodcastAPI
 {
     public sealed class Client
     {
-        private readonly string BASE_URL_TEST = "https://listen-api-test.listennotes.com/api/v2";
-        private readonly string BASE_URL_PROD = "https://listen-api.listennotes.com/api/v2";
+        public readonly string BASE_URL_TEST = "https://listen-api-test.listennotes.com/api/v2";
+        public readonly string BASE_URL_PROD = "https://listen-api.listennotes.com/api/v2";
+        public readonly IRestClient restClient;
         private readonly string userAgent;
-        private readonly IRestClient restClient;
 
         public Client(string apiKey = null)
         {
@@ -37,31 +39,45 @@ namespace PodcastAPI
 
         private async Task<ApiResponse> Get(string url, IDictionary<string, string> queryParameters)
         {
-            var request = new RestRequest(url, Method.GET);
-
-            foreach (var parameter in queryParameters)
+            try
             {
-                request.AddQueryParameter(parameter.Key, parameter.Value);
+                var request = new RestRequest(url, Method.GET);
+
+                foreach (var parameter in queryParameters)
+                {
+                    request.AddQueryParameter(parameter.Key, parameter.Value);
+                }
+
+                var response = await restClient.ExecuteAsync(request);
+
+                var result = new ApiResponse(response.Content, response);
+
+                return result;
             }
-
-            var response = await restClient.ExecuteAsync(request);
-
-            var result = new ApiResponse(response.Content, response);
-
-            return result;
+            catch (Exception ex)
+            {
+                throw new ListenApiException(ex.Message, ex);
+            }
         }
 
         private async Task<ApiResponse> Post(string url, IDictionary<string, string> bodyParameters)
         {
-            var request = new RestRequest(url, Method.POST);
+            try
+            {
+                var request = new RestRequest(url, Method.POST);
 
-            request.AddJsonBody(bodyParameters);
+                request.AddJsonBody(bodyParameters);
 
-            var response = await restClient.ExecuteAsync(request);
+                var response = await restClient.ExecuteAsync(request);
 
-            var result = new ApiResponse(response.Content, response);
+                var result = new ApiResponse(response.Content, response);
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new ListenApiException(ex.Message, ex);
+            }
         }
     }
 }
