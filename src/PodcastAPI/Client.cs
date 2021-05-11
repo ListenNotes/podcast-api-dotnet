@@ -40,13 +40,46 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        private async Task<ApiResponse> Get(string url, IDictionary<string, string> queryParameters)
+        public async Task<ApiResponse> Typeahead(IDictionary<string, string> parameters)
+        {
+            var url = "typeahead";
+            return await Get(url, parameters);
+        }
+
+        public async Task<ApiResponse> BestPodcasts(IDictionary<string, string> parameters)
+        {
+            var url = "best_podcasts";
+            return await Get(url, parameters);
+        }
+
+        public async Task<ApiResponse> Genres(IDictionary<string, string> parameters)
+        {
+            var url = "genres";
+            return await Get(url, parameters);
+        }
+
+        public async Task<ApiResponse> Regions()
+        {
+            var url = "regions";
+            return await Get(url);
+        }
+
+        public async Task<ApiResponse> Languages()
+        {
+            var url = "languages";
+            return await Get(url);
+        }
+
+        private async Task<ApiResponse> Get(string url, IDictionary<string, string> queryParameters = null)
         {
             var request = new RestRequest(url, Method.GET);
 
-            foreach (var parameter in queryParameters)
+            if (queryParameters != null)
             {
-                request.AddQueryParameter(parameter.Key, parameter.Value);
+                foreach (var parameter in queryParameters)
+                {
+                    request.AddQueryParameter(parameter.Key, parameter.Value);
+                }
             }
 
             var response = await restClient.ExecuteAsync(request);
@@ -63,6 +96,19 @@ namespace PodcastAPI
             var request = new RestRequest(url, Method.POST);
 
             request.AddJsonBody(bodyParameters);
+
+            var response = await restClient.ExecuteAsync(request);
+
+            ProcessStatus((int)response.StatusCode);
+
+            var result = new ApiResponse(response.Content, response);
+
+            return result;
+        }
+
+        private async Task<ApiResponse> Delete(string url)
+        {
+            var request = new RestRequest(url, Method.DELETE);
 
             var response = await restClient.ExecuteAsync(request);
 
