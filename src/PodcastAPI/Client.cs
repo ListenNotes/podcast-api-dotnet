@@ -1,4 +1,6 @@
-﻿using RestSharp;
+﻿using PodcastAPI.Exceptions;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,10 +8,10 @@ namespace PodcastAPI
 {
     public sealed class Client
     {
-        private readonly string BASE_URL_TEST = "https://listen-api-test.listennotes.com/api/v2";
-        private readonly string BASE_URL_PROD = "https://listen-api.listennotes.com/api/v2";
-        private readonly string userAgent;
-        private readonly IRestClient restClient;
+        public readonly string BASE_URL_TEST = "https://listen-api-test.listennotes.com/api/v2";
+        public readonly string BASE_URL_PROD = "https://listen-api.listennotes.com/api/v2";
+        public readonly IRestClient restClient;
+        public readonly string userAgent;
 
         public Client(string apiKey = null)
         {
@@ -25,6 +27,9 @@ namespace PodcastAPI
             {
                 restClient.AddDefaultHeader("X-ListenAPI-Key", apiKey);
             }
+
+            // default is 30 seconds
+            restClient.Timeout = 30000;
 
             restClient.AddDefaultHeader("User-Agent", userAgent);
         }
@@ -46,6 +51,8 @@ namespace PodcastAPI
 
             var response = await restClient.ExecuteAsync(request);
 
+            ProcessStatus((int)response.StatusCode);
+
             var result = new ApiResponse(response.Content, response);
 
             return result;
@@ -59,9 +66,33 @@ namespace PodcastAPI
 
             var response = await restClient.ExecuteAsync(request);
 
+            ProcessStatus((int)response.StatusCode);
+
             var result = new ApiResponse(response.Content, response);
 
             return result;
+        }
+
+        private void ProcessStatus(int status)
+        {
+            switch (status)
+            {
+                case 401:
+                    throw new AuthenticationException("Wrong api key or your account is suspended");
+                case 429:
+                    throw new RateLimitException("You use FREE plan and you exceed the quota limit.");
+                case 404:
+                    throw new NotFoundException("Endpoint not exist, or podcast / episode not exist.");
+                case 400:
+                    throw new InvalidRequestException("Something wrong on your end (client side errors), e.g., missing required parameters.");
+                case 0:
+                    throw new ApiConnectionException("Failed to connect to Listen API servers.");
+            }
+
+            if (status >= 500)
+            {
+                throw new ListenApiException("Error on our end (unexpected server errors)");
+            }
         }
     }
 }
