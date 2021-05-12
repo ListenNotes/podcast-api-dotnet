@@ -58,16 +58,16 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> FetchPodcastRegions()
+        public async Task<ApiResponse> FetchPodcastRegions(IDictionary<string, string> parameters = null)
         {
             var url = "regions";
-            return await Get(url);
+            return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> FetchPodcastLanguages()
+        public async Task<ApiResponse> FetchPodcastLanguages(IDictionary<string, string> parameters = null)
         {
             var url = "languages";
-            return await Get(url);
+            return await Get(url, parameters);
         }
 
         public async Task<ApiResponse> FetchPodcastById(IDictionary<string, string> parameters)
@@ -100,11 +100,11 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> JustListen()
+        public async Task<ApiResponse> JustListen(IDictionary<string, string> parameters = null)
         {
             var url = $"just_listen";
 
-            return await Get(url);
+            return await Get(url, parameters);
         }
 
         public async Task<ApiResponse> FetchRecommendationsForPodcast(IDictionary<string, string> parameters)
