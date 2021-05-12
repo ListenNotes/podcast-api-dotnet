@@ -163,13 +163,13 @@ namespace PodcastAPI
             return await Delete(url, parameters);
         }
 
-        private async Task<ApiResponse> Get(string url, IDictionary<string, string> queryParameters = null)
+        private async Task<ApiResponse> Get(string url, IDictionary<string, string> parameters = null)
         {
             var request = new RestRequest(url, Method.GET);
 
-            if (queryParameters != null)
+            if (parameters != null)
             {
-                foreach (var parameter in queryParameters)
+                foreach (var parameter in parameters)
                 {
                     request.AddQueryParameter(parameter.Key, parameter.Value);
                 }
@@ -184,15 +184,15 @@ namespace PodcastAPI
             return result;
         }
 
-        private async Task<ApiResponse> Post(string url, IDictionary<string, string> bodyParameters)
+        private async Task<ApiResponse> Post(string url, IDictionary<string, string> parameters)
         {
             var request = new RestRequest(url, Method.POST);
 
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
 
-            if (bodyParameters != null)
+            if (parameters != null)
             {
-                foreach (var parameter in bodyParameters)
+                foreach (var parameter in parameters)
                 {
                     request.AddParameter(parameter.Key, parameter.Value);
                 }
@@ -207,13 +207,13 @@ namespace PodcastAPI
             return result;
         }
 
-        private async Task<ApiResponse> Delete(string url, IDictionary<string, string> queryParameters)
+        private async Task<ApiResponse> Delete(string url, IDictionary<string, string> parameters)
         {
             var request = new RestRequest(url, Method.DELETE);
 
-            if (queryParameters != null)
+            if (parameters != null)
             {
-                foreach (var parameter in queryParameters)
+                foreach (var parameter in parameters)
                 {
                     request.AddQueryParameter(parameter.Key, parameter.Value);
                 }
