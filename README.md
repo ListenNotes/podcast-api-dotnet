@@ -1,5 +1,6 @@
 # Podcast API .Net Library
 
+[![NuGet](https://img.shields.io/nuget/v/PodcastAPI.svg)](https://www.nuget.org/packages/PodcastAPI/) ![GitHub Workflow](https://github.com/ListenNotes/podcast-api-dotnet/actions/workflows/dotnet.yml/badge.svg) 
 
 The Podcast API .Net library provides convenient access to the [Listen Notes Podcast API](https://www.listennotes.com/api/) from
 applications written in C#.
@@ -10,19 +11,21 @@ If you have any questions, please contact [hello@listennotes.com](hello@listenno
 
 ## Installation
 
-Using the [.NET Core command-line interface (CLI) tools][dotnet-core-cli-tools]:
+You can install our [NuGet PodcastAPI package](https://www.nuget.org/packages/PodcastAPI/).
+
+Using the .NET Core command-line interface (CLI) tools:
 
 ```sh
 dotnet add package PodcastAPI
 ```
 
-Using the [NuGet Command Line Interface (CLI)][nuget-cli]:
+Using the NuGet Command Line Interface (CLI):
 
 ```sh
 nuget install PodcastAPI
 ```
 
-Using the [Package Manager Console][package-manager-console]:
+Using the Package Manager Console:
 
 ```powershell
 Install-Package PodcastAPI
