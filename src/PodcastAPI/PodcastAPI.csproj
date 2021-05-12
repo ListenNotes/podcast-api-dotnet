@@ -8,6 +8,7 @@
     <Authors>Listen Notes, Inc.</Authors>
     <Company>Listen Notes, Inc.</Company>
     <PackageProjectUrl>https://www.listennotes.com/api/</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
