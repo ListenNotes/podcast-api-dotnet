@@ -3,11 +3,27 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.1</Version>
-    <Description>The official Listen Notes Podcast API.</Description>
+    <Version>1.0.3</Version>
+    <Description>The Official .Net Library for Listen Notes Podcast API.</Description>
     <Authors>Listen Notes, Inc.</Authors>
     <Company>Listen Notes, Inc.</Company>
-    <PackageProjectUrl>https://www.listennotes.com/api/</PackageProjectUrl>
+    <PackageId>PodcastAPI</PackageId>
+    <PackageTags>listennotes;podcast;api</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageProjectUrl>https://www.listennotes.com/api/</PackageProjectUrl>    
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryUrl>https://github.com/ListenNotes/podcast-api-dotnet</RepositoryUrl> 
+    <RepositoryType>git</RepositoryType> 
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Copyright>Listen Notes, Inc.</Copyright>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Owners>Listen Notes, Inc.</Owners>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <Summary>The Official .Net Library for Listen Notes Podcast API.</Summary>
+    <Title>Podcast Search and Directory API</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <ReleaseVersion>1.0.3</ReleaseVersion>
+    <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,4 +31,10 @@
     <PackageReference Include="RestSharp" Version="106.11.7" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="icon.png" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
 </Project>
