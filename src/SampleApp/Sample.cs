@@ -15,22 +15,18 @@ namespace PodcastAPI
 
                 var client = new Client();
                 var parameters = new Dictionary<string, string>();
-
                 parameters.Add("q", "startup");
                 var result = client.Search(parameters).Result;
-
                 var jsonObject = result.ToJSON<dynamic>();
+                Console.WriteLine($"Json Object: {jsonObject}");
 
                 var freeQuota = result.GetFreeQuota();
-
                 Console.WriteLine($"Free Quota: {freeQuota}");
 
                 var usage = result.GetUsage();
-
                 Console.WriteLine($"Usage: {usage}");
 
                 var nextBillingDate = result.GetNextBillingDate();
-
                 Console.WriteLine($"Next Billing Date: {nextBillingDate}");
 
                 //parameters = new Dictionary<string, string>();
@@ -115,8 +111,6 @@ namespace PodcastAPI
                 //parameters.Add("reason", "the podcaster wants to delete it");
                 //result = client.DeletePodcast(parameters).Result;
                 //Console.WriteLine($"{result}");
-
-                Console.Read();
             }
             catch (AuthenticationException ex)
             {
@@ -141,9 +135,7 @@ namespace PodcastAPI
             catch (Exception ex)
             {
                 Console.WriteLine($"Application Exception: {ex}");
-            }
-
-            Console.Read();
+            }            
         }
     }
 }
