@@ -12,7 +12,7 @@ namespace PodcastAPI.Tests
     public class ClientTests
     {
         [TestMethod]
-        public void Client_ShouldUseTestUrlWithNullApiKey()
+        public void Client_Constructor_ShouldUseTestUrlWithNullApiKey()
         {
             // Arrange & Act
             var client = new Client();
@@ -23,7 +23,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_ShouldUseProdUrlWithApiKey()
+        public void Client_Constructor_ShouldUseProdUrlWithApiKey()
         {
             // Arrange
             var apiKey = "testApiKey";
@@ -38,7 +38,7 @@ namespace PodcastAPI.Tests
 
         [TestMethod]
         [ExpectedException(typeof(AuthenticationException))]
-        public async Task Client_ShouldThrowAuthenticationExceptionWithInvalidApiKey()
+        public async Task Client_Constructor_ShouldThrowAuthenticationExceptionWithInvalidApiKey()
         {
             // Arrange
             var apiKey = "invalidApiKey";
@@ -53,7 +53,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_ShouldHave30SecondDefaultTimeout()
+        public void Client_Constructor_ShouldHave30SecondDefaultTimeout()
         {
             // Arrange & Act
             var client = new Client();
@@ -63,7 +63,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_SearchMockDataShouldExist()
+        public void Client_Search_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -94,7 +94,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_TypeaheadMockDataShouldExist()
+        public void Client_Typeahead_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -125,7 +125,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_BestPodcastsMockDataShouldExist()
+        public void Client_FetchBestPodcasts_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -135,7 +135,7 @@ namespace PodcastAPI.Tests
             parameters.Add("genre_id", "23");
 
             // Act
-            var result = client.BestPodcasts(parameters).Result;
+            var result = client.FetchBestPodcasts(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -153,7 +153,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GenresMockDataShouldExist()
+        public void Client_FetchPodcastGenres_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -163,7 +163,7 @@ namespace PodcastAPI.Tests
             parameters.Add("top_level_only", "1");
 
             // Act
-            var result = client.Genres(parameters).Result;
+            var result = client.FetchPodcastGenres(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -182,13 +182,13 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_RegionsMockDataShouldExist()
+        public void Client_FetchPodcastRegions_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
 
             // Act
-            var result = client.Regions().Result;
+            var result = client.FetchPodcastRegions().Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -202,13 +202,13 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_LanguagesMockDataShouldExist()
+        public void Client_FetchPodcastLanguages_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
 
             // Act
-            var result = client.Languages().Result;
+            var result = client.FetchPodcastLanguages().Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -220,6 +220,242 @@ namespace PodcastAPI.Tests
 
             Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
             Assert.AreEqual(result.response.ResponseUri.AbsolutePath, "/api/v2/languages");
+        }
+
+        [TestMethod]
+        public void Client_FetchPodcastById_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            var id = "23";
+
+            parameters.Add("id", id);
+
+            // Act
+            var result = client.FetchPodcastById(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.episodes is IEnumerable);
+            Assert.IsTrue(json.episodes.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, $"/api/v2/podcasts/{id}");
+        }
+
+        [TestMethod]
+        public void Client_FetchEpisodeById_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            var id = "23";
+
+            parameters.Add("id", id);
+
+            // Act
+            var result = client.FetchEpisodeById(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.podcast.rss is IEnumerable);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, $"/api/v2/episodes/{id}");
+        }
+
+        [TestMethod]
+        public void Client_FetchCuratedPodcastsListById_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            var id = "23";
+
+            parameters.Add("id", id);
+
+            // Act
+            var result = client.FetchCuratedPodcastsListById(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.podcasts is IEnumerable);
+            Assert.IsTrue(json.podcasts.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, $"/api/v2/curated_podcasts/{id}");
+        }
+
+        [TestMethod]
+        public void Client_JustListen_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            // Act
+            var result = client.JustListen().Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.audio_length_sec > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, "/api/v2/just_listen");
+        }
+
+        [TestMethod]
+        public void Client_FetchCuratedPodcastsLists_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+            parameters.Add("page", "2");
+
+            // Act
+            var result = client.FetchCuratedPodcastsLists(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.total > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, $"/api/v2/curated_podcasts");
+
+            var requestParameters = result.response.Request.Parameters;
+
+            Assert.AreEqual(requestParameters.First(rp => rp.Name.Equals("page")).Value, parameters["page"]);
+        }
+
+        [TestMethod]
+        public void Client_FetchRecommendationsForPodcast_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            var id = "23";
+
+            parameters.Add("id", id);
+
+            // Act
+            var result = client.FetchRecommendationsForPodcast(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.recommendations is IEnumerable);
+            Assert.IsTrue(json.recommendations.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, $"/api/v2/podcasts/{id}/recommendations");
+        }
+
+        [TestMethod]
+        public void Client_FetchRecommendationsForEpisode_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            var id = "23";
+
+            parameters.Add("id", id);
+
+            // Act
+            var result = client.FetchRecommendationsForEpisode(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.recommendations is IEnumerable);
+            Assert.IsTrue(json.recommendations.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, $"/api/v2/episodes/{id}/recommendations");
+        }
+
+        [TestMethod]
+        public void Client_FetchMyPlaylists_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+            parameters.Add("page", "2");
+
+            // Act
+            var result = client.FetchMyPlaylists(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.playlists is IEnumerable);
+            Assert.IsTrue(json.playlists.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, $"/api/v2/playlists");
+
+            var requestParameters = result.response.Request.Parameters;
+
+            Assert.AreEqual(requestParameters.First(rp => rp.Name.Equals("page")).Value, parameters["page"]);
+        }
+
+        [TestMethod]
+        public void Client_FetchPlaylistById_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            var id = "23";
+
+            parameters.Add("id", id);
+
+            // Act
+            var result = client.FetchPlaylistById(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.items is IEnumerable);
+            Assert.IsTrue(json.items.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, $"/api/v2/playlists/{id}");
         }
     }
 }

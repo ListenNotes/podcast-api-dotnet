@@ -46,28 +46,95 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> BestPodcasts(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchBestPodcasts(IDictionary<string, string> parameters)
         {
             var url = "best_podcasts";
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> Genres(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchPodcastGenres(IDictionary<string, string> parameters)
         {
             var url = "genres";
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> Regions()
+        public async Task<ApiResponse> FetchPodcastRegions()
         {
             var url = "regions";
             return await Get(url);
         }
 
-        public async Task<ApiResponse> Languages()
+        public async Task<ApiResponse> FetchPodcastLanguages()
         {
             var url = "languages";
             return await Get(url);
+        }
+
+        public async Task<ApiResponse> FetchPodcastById(IDictionary<string, string> parameters)
+        {
+            var url = $"podcasts/{parameters["id"]}";
+            parameters.Remove("id");
+
+            return await Get(url, parameters);
+        }
+
+        public async Task<ApiResponse> FetchEpisodeById(IDictionary<string, string> parameters)
+        {
+            var url = $"episodes/{parameters["id"]}";
+            parameters.Remove("id");
+
+            return await Get(url, parameters);
+        }
+
+        public async Task<ApiResponse> FetchCuratedPodcastsListById(IDictionary<string, string> parameters)
+        {
+            var url = $"curated_podcasts/{parameters["id"]}";
+            parameters.Remove("id");
+
+            return await Get(url, parameters);
+        }
+
+        public async Task<ApiResponse> FetchCuratedPodcastsLists(IDictionary<string, string> parameters)
+        {
+            var url = "curated_podcasts";
+            return await Get(url, parameters);
+        }
+
+        public async Task<ApiResponse> JustListen()
+        {
+            var url = $"just_listen";
+
+            return await Get(url);
+        }
+
+        public async Task<ApiResponse> FetchRecommendationsForPodcast(IDictionary<string, string> parameters)
+        {
+            var url = $"podcasts/{parameters["id"]}/recommendations";
+            parameters.Remove("id");
+
+            return await Get(url, parameters);
+        }
+
+        public async Task<ApiResponse> FetchRecommendationsForEpisode(IDictionary<string, string> parameters)
+        {
+            var url = $"episodes/{parameters["id"]}/recommendations";
+            parameters.Remove("id");
+
+            return await Get(url, parameters);
+        }
+
+        public async Task<ApiResponse> FetchPlaylistById(IDictionary<string, string> parameters)
+        {
+            var url = $"playlists/{parameters["id"]}";
+            parameters.Remove("id");
+
+            return await Get(url, parameters);
+        }
+
+        public async Task<ApiResponse> FetchMyPlaylists(IDictionary<string, string> parameters)
+        {
+            var url = "playlists";
+            return await Get(url, parameters);
         }
 
         private async Task<ApiResponse> Get(string url, IDictionary<string, string> queryParameters = null)
