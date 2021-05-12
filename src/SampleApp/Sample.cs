@@ -13,7 +13,7 @@ namespace PodcastAPI
 
                 var apiKey = Environment.GetEnvironmentVariable("LISTEN_API_KEY");
 
-                var client = new Client();
+                var client = new Client(apiKey);
                 var parameters = new Dictionary<string, string>();
                 parameters.Add("q", "startup");
                 var result = client.Search(parameters).Result;
