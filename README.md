@@ -93,7 +93,7 @@ namespace PodcastApp
 
             try
             {
-                var client = new PodcastAPI.Client();
+                var client = new PodcastAPI.Client(apiKey);
 
                 var parameters = new Dictionary<string, string>();
                 parameters.Add("q", "startup");
