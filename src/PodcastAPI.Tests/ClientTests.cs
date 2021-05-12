@@ -94,7 +94,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetTypeahead_MockDataShouldExist()
+        public void Client_Typeahead_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -105,7 +105,7 @@ namespace PodcastAPI.Tests
             parameters.Add("show_podcasts", "1");
 
             // Act
-            var result = client.GetTypeahead(parameters).Result;
+            var result = client.Typeahead(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -125,7 +125,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetBestPodcasts_MockDataShouldExist()
+        public void Client_FetchBestPodcasts_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -135,7 +135,7 @@ namespace PodcastAPI.Tests
             parameters.Add("genre_id", "23");
 
             // Act
-            var result = client.GetBestPodcasts(parameters).Result;
+            var result = client.FetchBestPodcasts(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -153,7 +153,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetGenres_MockDataShouldExist()
+        public void Client_FetchPodcastGenres_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -163,7 +163,7 @@ namespace PodcastAPI.Tests
             parameters.Add("top_level_only", "1");
 
             // Act
-            var result = client.GetGenres(parameters).Result;
+            var result = client.FetchPodcastGenres(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -182,13 +182,13 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetRegions_MockDataShouldExist()
+        public void Client_FetchPodcastRegions_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
 
             // Act
-            var result = client.GetRegions().Result;
+            var result = client.FetchPodcastRegions().Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -202,13 +202,13 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetLanguages_MockDataShouldExist()
+        public void Client_FetchPodcastLanguages_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
 
             // Act
-            var result = client.GetLanguages().Result;
+            var result = client.FetchPodcastLanguages().Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -223,7 +223,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetPodcast_MockDataShouldExist()
+        public void Client_FetchPodcastById_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -235,7 +235,7 @@ namespace PodcastAPI.Tests
             parameters.Add("id", id);
 
             // Act
-            var result = client.GetPodcast(parameters).Result;
+            var result = client.FetchPodcastById(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -250,7 +250,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetEpisode_MockDataShouldExist()
+        public void Client_FetchEpisodeById_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -262,7 +262,7 @@ namespace PodcastAPI.Tests
             parameters.Add("id", id);
 
             // Act
-            var result = client.GetEpisode(parameters).Result;
+            var result = client.FetchEpisodeById(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -276,7 +276,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetCuratedPodcast_MockDataShouldExist()
+        public void Client_FetchCuratedPodcastsListById_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -288,7 +288,7 @@ namespace PodcastAPI.Tests
             parameters.Add("id", id);
 
             // Act
-            var result = client.GetCuratedPodcast(parameters).Result;
+            var result = client.FetchCuratedPodcastsListById(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -303,13 +303,13 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetJustListen_MockDataShouldExist()
+        public void Client_JustListen_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
 
             // Act
-            var result = client.GetJustListen().Result;
+            var result = client.JustListen().Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -323,7 +323,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetCuratedPodcasts_MockDataShouldExist()
+        public void Client_FetchCuratedPodcastsLists_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -332,7 +332,7 @@ namespace PodcastAPI.Tests
             parameters.Add("page", "2");
 
             // Act
-            var result = client.GetCuratedPodcasts(parameters).Result;
+            var result = client.FetchCuratedPodcastsLists(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -350,7 +350,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetPodcastRecommendations_MockDataShouldExist()
+        public void Client_FetchRecommendationsForPodcast_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -362,7 +362,7 @@ namespace PodcastAPI.Tests
             parameters.Add("id", id);
 
             // Act
-            var result = client.GetPodcastRecommendations(parameters).Result;
+            var result = client.FetchRecommendationsForPodcast(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -377,7 +377,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetEpisodeRecommendations_MockDataShouldExist()
+        public void Client_FetchRecommendationsForEpisode_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -389,7 +389,7 @@ namespace PodcastAPI.Tests
             parameters.Add("id", id);
 
             // Act
-            var result = client.GetEpisodeRecommendations(parameters).Result;
+            var result = client.FetchRecommendationsForEpisode(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -404,7 +404,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetPlaylists_MockDataShouldExist()
+        public void Client_FetchMyPlaylists_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -413,7 +413,7 @@ namespace PodcastAPI.Tests
             parameters.Add("page", "2");
 
             // Act
-            var result = client.GetPlaylists(parameters).Result;
+            var result = client.FetchMyPlaylists(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
@@ -432,7 +432,7 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
-        public void Client_GetPlaylist_MockDataShouldExist()
+        public void Client_FetchPlaylistById_MockDataShouldExist()
         {
             // Arrange
             var client = new Client();
@@ -444,7 +444,7 @@ namespace PodcastAPI.Tests
             parameters.Add("id", id);
 
             // Act
-            var result = client.GetPlaylist(parameters).Result;
+            var result = client.FetchPlaylistById(parameters).Result;
 
             // Assert
             Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);

@@ -40,37 +40,37 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> GetTypeahead(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> Typeahead(IDictionary<string, string> parameters)
         {
             var url = "typeahead";
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> GetBestPodcasts(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchBestPodcasts(IDictionary<string, string> parameters)
         {
             var url = "best_podcasts";
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> GetGenres(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchPodcastGenres(IDictionary<string, string> parameters)
         {
             var url = "genres";
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> GetRegions()
+        public async Task<ApiResponse> FetchPodcastRegions()
         {
             var url = "regions";
             return await Get(url);
         }
 
-        public async Task<ApiResponse> GetLanguages()
+        public async Task<ApiResponse> FetchPodcastLanguages()
         {
             var url = "languages";
             return await Get(url);
         }
 
-        public async Task<ApiResponse> GetPodcast(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchPodcastById(IDictionary<string, string> parameters)
         {
             var url = $"podcasts/{parameters["id"]}";
             parameters.Remove("id");
@@ -78,7 +78,7 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> GetEpisode(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchEpisodeById(IDictionary<string, string> parameters)
         {
             var url = $"episodes/{parameters["id"]}";
             parameters.Remove("id");
@@ -86,7 +86,7 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> GetCuratedPodcast(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchCuratedPodcastsListById(IDictionary<string, string> parameters)
         {
             var url = $"curated_podcasts/{parameters["id"]}";
             parameters.Remove("id");
@@ -94,20 +94,20 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> GetCuratedPodcasts(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchCuratedPodcastsLists(IDictionary<string, string> parameters)
         {
             var url = "curated_podcasts";
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> GetJustListen()
+        public async Task<ApiResponse> JustListen()
         {
             var url = $"just_listen";
 
             return await Get(url);
         }
 
-        public async Task<ApiResponse> GetPodcastRecommendations(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchRecommendationsForPodcast(IDictionary<string, string> parameters)
         {
             var url = $"podcasts/{parameters["id"]}/recommendations";
             parameters.Remove("id");
@@ -115,7 +115,7 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> GetEpisodeRecommendations(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchRecommendationsForEpisode(IDictionary<string, string> parameters)
         {
             var url = $"episodes/{parameters["id"]}/recommendations";
             parameters.Remove("id");
@@ -123,7 +123,7 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> GetPlaylist(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchPlaylistById(IDictionary<string, string> parameters)
         {
             var url = $"playlists/{parameters["id"]}";
             parameters.Remove("id");
@@ -131,7 +131,7 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        public async Task<ApiResponse> GetPlaylists(IDictionary<string, string> parameters)
+        public async Task<ApiResponse> FetchMyPlaylists(IDictionary<string, string> parameters)
         {
             var url = "playlists";
             return await Get(url, parameters);
