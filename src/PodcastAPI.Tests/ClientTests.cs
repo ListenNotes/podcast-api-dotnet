@@ -37,8 +37,18 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
+        public void Client_Constructor_ShouldHave30SecondDefaultTimeout()
+        {
+            // Arrange & Act
+            var client = new Client();
+
+            // Assert
+            Assert.AreEqual(client.restClient.Timeout, 30000);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(AuthenticationException))]
-        public async Task Client_Constructor_ShouldThrowAuthenticationExceptionWithInvalidApiKey()
+        public async Task Client_Search_ShouldThrowAuthenticationExceptionWithInvalidApiKey()
         {
             // Arrange
             var apiKey = "invalidApiKey";
@@ -50,16 +60,6 @@ namespace PodcastAPI.Tests
 
             // Assert
             var result = await client.Search(parameters);
-        }
-
-        [TestMethod]
-        public void Client_Constructor_ShouldHave30SecondDefaultTimeout()
-        {
-            // Arrange & Act
-            var client = new Client();
-
-            // Assert
-            Assert.AreEqual(client.restClient.Timeout, 30000);
         }
 
         [TestMethod]
