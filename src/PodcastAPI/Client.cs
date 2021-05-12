@@ -137,13 +137,39 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
-        private async Task<ApiResponse> Get(string url, IDictionary<string, string> queryParameters = null)
+        public async Task<ApiResponse> SubmitPodcast(IDictionary<string, string> parameters)
+        {
+            var url = "podcasts/submit";
+            return await Post(url, parameters);
+        }
+
+        public async Task<ApiResponse> BatchFetchPodcasts(IDictionary<string, string> parameters)
+        {
+            var url = "podcasts";
+            return await Post(url, parameters);
+        }
+
+        public async Task<ApiResponse> BatchFetchEpisodes(IDictionary<string, string> parameters)
+        {
+            var url = "episodes";
+            return await Post(url, parameters);
+        }
+
+        public async Task<ApiResponse> DeletePodcast(IDictionary<string, string> parameters)
+        {
+            var url = $"podcasts/{parameters["id"]}";
+            parameters.Remove("id");
+
+            return await Delete(url, parameters);
+        }
+
+        private async Task<ApiResponse> Get(string url, IDictionary<string, string> parameters = null)
         {
             var request = new RestRequest(url, Method.GET);
 
-            if (queryParameters != null)
+            if (parameters != null)
             {
-                foreach (var parameter in queryParameters)
+                foreach (var parameter in parameters)
                 {
                     request.AddQueryParameter(parameter.Key, parameter.Value);
                 }
@@ -158,11 +184,19 @@ namespace PodcastAPI
             return result;
         }
 
-        private async Task<ApiResponse> Post(string url, IDictionary<string, string> bodyParameters)
+        private async Task<ApiResponse> Post(string url, IDictionary<string, string> parameters)
         {
             var request = new RestRequest(url, Method.POST);
 
-            request.AddJsonBody(bodyParameters);
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            if (parameters != null)
+            {
+                foreach (var parameter in parameters)
+                {
+                    request.AddParameter(parameter.Key, parameter.Value);
+                }
+            }
 
             var response = await restClient.ExecuteAsync(request);
 
@@ -173,9 +207,17 @@ namespace PodcastAPI
             return result;
         }
 
-        private async Task<ApiResponse> Delete(string url)
+        private async Task<ApiResponse> Delete(string url, IDictionary<string, string> parameters)
         {
             var request = new RestRequest(url, Method.DELETE);
+
+            if (parameters != null)
+            {
+                foreach (var parameter in parameters)
+                {
+                    request.AddQueryParameter(parameter.Key, parameter.Value);
+                }
+            }
 
             var response = await restClient.ExecuteAsync(request);
 
