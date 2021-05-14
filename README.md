@@ -2564,7 +2564,7 @@ var client = new PodcastAPI.Client(apiKey);
 var parameters = new Dictionary<string, string>();
 
 parameters.Add("page", "2");
-parameters.Add("region_id", "93");
+parameters.Add("genre_id", "93");
 var result = client.FetchBestPodcasts(parameters).Result;             
            
 var jsonObject = result.ToJSON<dynamic>();
