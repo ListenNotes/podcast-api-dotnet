@@ -46,6 +46,24 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
+        public async Task<ApiResponse> SpellCheck(IDictionary<string, string> parameters)
+        {
+            var url = "spellcheck";
+            return await Get(url, parameters);
+        }        
+
+        public async Task<ApiResponse> FetchRelatedSearches(IDictionary<string, string> parameters)
+        {
+            var url = "related_searches";
+            return await Get(url, parameters);
+        }        
+
+        public async Task<ApiResponse> FetchTrendingSearches(IDictionary<string, string> parameters)
+        {
+            var url = "trending_searches";
+            return await Get(url, parameters);
+        } 
+
         public async Task<ApiResponse> FetchBestPodcasts(IDictionary<string, string> parameters)
         {
             var url = "best_podcasts";

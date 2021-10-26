@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.4</Version>
+    <Version>1.1.0</Version>
     <Description>The Official .Net Library for Listen Notes Podcast API.</Description>
     <Authors>Listen Notes, Inc.</Authors>
     <Company>Listen Notes, Inc.</Company>
@@ -22,13 +22,13 @@
     <Summary>The Official .Net Library for Listen Notes Podcast API.</Summary>
     <Title>Podcast Search and Directory API</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <ReleaseVersion>1.0.3</ReleaseVersion>
+    <ReleaseVersion>1.1.0</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="RestSharp" Version="106.12.0" />
   </ItemGroup>
 
 

@@ -125,6 +125,85 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
+        public void Client_SpellCheck_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            parameters.Add("q", "test");
+
+            // Act
+            var result = client.SpellCheck(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.tokens is IEnumerable);
+            Assert.IsTrue(json.tokens.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, "/api/v2/spellcheck");
+
+            var requestParameters = result.response.Request.Parameters;
+            Assert.AreEqual(requestParameters.First(rp => rp.Name.Equals("q")).Value, parameters["q"]);
+        }        
+
+        [TestMethod]
+        public void Client_FetchRelatedSearches_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            parameters.Add("q", "test");
+
+            // Act
+            var result = client.FetchRelatedSearches(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.terms is IEnumerable);
+            Assert.IsTrue(json.terms.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, "/api/v2/related_searches");
+
+            var requestParameters = result.response.Request.Parameters;
+            Assert.AreEqual(requestParameters.First(rp => rp.Name.Equals("q")).Value, parameters["q"]);
+        }   
+
+        [TestMethod]
+        public void Client_FetchTrendingSearches_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            // Act
+            var result = client.FetchTrendingSearches(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.terms is IEnumerable);
+            Assert.IsTrue(json.terms.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, "/api/v2/trending_searches");
+        } 
+
+        [TestMethod]
         public void Client_FetchBestPodcasts_MockDataShouldExist()
         {
             // Arrange
