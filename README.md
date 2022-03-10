@@ -157,7 +157,7 @@ the sort of error that occurred.
 |  AuthenticationException | wrong api key or your account is suspended  |
 | ApiConnectionException  | fail to connect to API servers  |
 | InvalidRequestException  | something wrong on your end (client side errors), e.g., missing required parameters  |
-| RateLimitException  | you are using FREE plan and you exceed the quota limit  |
+| RateLimitException  | for FREE plan, exceeding the quota limit; or for all plans, sending too many requests too fast and exceeding the rate limit  |
 | NotFoundException  | endpoint not exist, or podcast / episode not exist  |
 | ListenApiException  | something wrong on our end (unexpected server errors)  |
 

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Description>The Official .Net Library for Listen Notes Podcast API.</Description>
     <Authors>Listen Notes, Inc.</Authors>
     <Company>Listen Notes, Inc.</Company>
@@ -22,7 +22,7 @@
     <Summary>The Official .Net Library for Listen Notes Podcast API.</Summary>
     <Title>Podcast Search and Directory API</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <ReleaseVersion>1.1.0</ReleaseVersion>
+    <ReleaseVersion>1.1.1</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
 
