@@ -1,6 +1,6 @@
 # Podcast API .Net Library
 
-![GitHub Workflow](https://github.com/ListenNotes/podcast-api-dotnet/actions/workflows/dotnet.yml/badge.svg) [![NuGet](https://img.shields.io/nuget/v/PodcastAPI.svg)](https://www.nuget.org/packages/PodcastAPI/)
+[![.NET](https://github.com/ListenNotes/podcast-api-dotnet/actions/workflows/dotnet.yml/badge.svg)](https://github.com/ListenNotes/podcast-api-dotnet/actions/workflows/dotnet.yml) [![NuGet](https://img.shields.io/nuget/v/PodcastAPI.svg)](https://www.nuget.org/packages/PodcastAPI/)
 
 The Podcast API .Net library provides convenient access to the [Listen Notes Podcast API](https://www.listennotes.com/podcast-api/) from
 applications written in C#.
