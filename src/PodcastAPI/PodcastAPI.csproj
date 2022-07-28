@@ -10,7 +10,7 @@
     <PackageId>PodcastAPI</PackageId>
     <PackageTags>listennotes;podcast;api</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageProjectUrl>https://www.listennotes.com/api/</PackageProjectUrl>    
+    <PackageProjectUrl>https://www.listennotes.com/podcast-api/</PackageProjectUrl>    
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryUrl>https://github.com/ListenNotes/podcast-api-dotnet</RepositoryUrl> 
     <RepositoryType>git</RepositoryType> 
