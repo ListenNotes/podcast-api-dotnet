@@ -650,5 +650,32 @@ namespace PodcastAPI.Tests
 
             Assert.AreEqual(requestParameters.First(rp => rp.Name.Equals("reason")).Value, parameters["reason"]);
         }
+
+        [TestMethod]
+        public void Client_FetchAudienceForPodcast_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            var id = "23";
+
+            parameters.Add("id", id);
+
+            // Act
+            var result = client.FetchAudienceForPodcast(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.by_regions is IEnumerable);
+            Assert.IsTrue(json.by_regions.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, $"/api/v2/podcasts/{id}/audience");
+        }        
     }
 }

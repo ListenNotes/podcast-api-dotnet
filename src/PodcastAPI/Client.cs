@@ -181,6 +181,14 @@ namespace PodcastAPI
             return await Delete(url, parameters);
         }
 
+        public async Task<ApiResponse> FetchAudienceForPodcast(IDictionary<string, string> parameters)
+        {
+            var url = $"podcasts/{parameters["id"]}/audience";
+            parameters.Remove("id");
+
+            return await Get(url, parameters);
+        }
+
         private async Task<ApiResponse> Get(string url, IDictionary<string, string> parameters = null)
         {
             var request = new RestRequest(url, Method.GET);
