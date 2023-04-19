@@ -189,6 +189,14 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
+        public async Task<ApiResponse> FetchPodcastsByDomain(IDictionary<string, string> parameters)
+        {
+            var url = $"podcasts/domains/{parameters["domain_name"]}";
+            parameters.Remove("domain_name");
+
+            return await Get(url, parameters);
+        }        
+
         private async Task<ApiResponse> Get(string url, IDictionary<string, string> parameters = null)
         {
             var request = new RestRequest(url, Method.GET);

@@ -676,6 +676,33 @@ namespace PodcastAPI.Tests
 
             Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
             Assert.AreEqual(result.response.ResponseUri.AbsolutePath, $"/api/v2/podcasts/{id}/audience");
-        }        
+        }
+
+        [TestMethod]
+        public void Client_FetchPodcastsByDomain_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            var domainName = "npr.org";
+
+            parameters.Add("domain_name", domainName);
+
+            // Act
+            var result = client.FetchPodcastsByDomain(parameters).Result;
+
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var json = result.ToJSON<dynamic>();
+
+            Assert.IsTrue(json.podcasts is IEnumerable);
+            Assert.IsTrue(json.podcasts.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, $"/api/v2/podcasts/domains/{domainName}");
+        }                
     }
 }
