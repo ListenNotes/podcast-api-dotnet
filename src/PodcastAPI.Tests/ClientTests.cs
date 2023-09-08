@@ -94,6 +94,38 @@ namespace PodcastAPI.Tests
         }
 
         [TestMethod]
+        public void Client_SearchEpisodeTitles_MockDataShouldExist()
+        {
+            // Arrange
+            var client = new Client();
+
+            var parameters = new Dictionary<string, string>();
+
+            parameters.Add("q", "test");
+            parameters.Add("podcast_id", "123");
+
+            // Act
+            var result = client.SearchEpisodeTitles(parameters).Result;
+            
+            // Assert
+            Assert.AreEqual(result.response.StatusCode, System.Net.HttpStatusCode.OK);
+
+            var results = result.ToJSON<dynamic>().results;
+
+            Assert.IsTrue(results is IEnumerable);
+            Assert.IsTrue(results.Count > 0);
+
+            Assert.AreEqual(result.response.Request.Method, RestSharp.Method.GET);
+            Assert.AreEqual(result.response.ResponseUri.AbsolutePath, "/api/v2/search_episode_titles");
+
+            var requestParameters = result.response.Request.Parameters;
+
+            Assert.AreEqual(requestParameters.First(rp => rp.Name.Equals("podcast_id")).Value, parameters["podcast_id"]);
+            Assert.AreEqual(requestParameters.First(rp => rp.Name.Equals("q")).Value, parameters["q"]);
+        }
+
+
+        [TestMethod]
         public void Client_Typeahead_MockDataShouldExist()
         {
             // Arrange

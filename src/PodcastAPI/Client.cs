@@ -40,6 +40,12 @@ namespace PodcastAPI
             return await Get(url, parameters);
         }
 
+        public async Task<ApiResponse> SearchEpisodeTitles(IDictionary<string, string> parameters)
+        {
+            var url = "search_episode_titles";
+            return await Get(url, parameters);
+        }
+
         public async Task<ApiResponse> Typeahead(IDictionary<string, string> parameters)
         {
             var url = "typeahead";
