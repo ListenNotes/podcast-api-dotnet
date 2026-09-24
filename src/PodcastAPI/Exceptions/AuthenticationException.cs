@@ -1,22 +1,8 @@
-﻿using System;
+namespace PodcastAPI.Exceptions;
 
-namespace PodcastAPI.Exceptions
+public class AuthenticationException : ListenApiException
 {
-    public class AuthenticationException : Exception
-    {
-        public AuthenticationException()
-        {
-
-        }
-
-        public AuthenticationException(string message) : base(message)
-        {
-
-        }
-
-        public AuthenticationException(string message, Exception inner) : base(message, inner)
-        {
-
-        }
-    }
+    public AuthenticationException() { }
+    public AuthenticationException(string message) : base(message) { }
+    public AuthenticationException(string message, Exception inner) : base(message, inner) { }
 }

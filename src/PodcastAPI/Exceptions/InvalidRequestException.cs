@@ -1,22 +1,8 @@
-﻿using System;
+namespace PodcastAPI.Exceptions;
 
-namespace PodcastAPI.Exceptions
+public class InvalidRequestException : ListenApiException
 {
-    public class InvalidRequestException : Exception
-    {
-        public InvalidRequestException()
-        {
-
-        }
-
-        public InvalidRequestException(string message) : base(message)
-        {
-
-        }
-
-        public InvalidRequestException(string message, Exception inner) : base(message, inner)
-        {
-
-        }
-    }
+    public InvalidRequestException() { }
+    public InvalidRequestException(string message) : base(message) { }
+    public InvalidRequestException(string message, Exception inner) : base(message, inner) { }
 }
