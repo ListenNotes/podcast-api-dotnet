@@ -1,28 +1,40 @@
 name: .NET
-
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
-
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        dotnet: ['8.0.x', '10.0.x']
+    env:
+      DOTNET_ROLL_FORWARD: ${{ matrix.dotnet == '10.0.x' && 'LatestMajor' || 'LatestPatch' }}
+      LISTEN_API_TEST_RUNTIME: ${{ matrix.dotnet == '10.0.x' && '10' || '8' }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 9.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: src
-    - name: Build
-      run: dotnet build PodcastAPI --no-restore
-      working-directory: src      
-    - name: Test
-      run: dotnet test PodcastAPI.Tests --verbosity normal
-      working-directory: src      
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+      - run: dotnet restore src/PodcastAPI.net.sln --locked-mode
+      - run: dotnet build src/PodcastAPI.net.sln --no-restore -c Release
+      - run: dotnet test src/PodcastAPI.Tests --no-build -c Release --filter 'TestCategory!=Integration'
+      - run: bash scripts/verify-package.sh
+  mock-integration:
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_ROLL_FORWARD: LatestMajor
+      LISTEN_API_MOCK_INTEGRATION: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet restore src/PodcastAPI.net.sln --locked-mode
+      - run: dotnet test src/PodcastAPI.Tests --no-restore -c Release --filter 'TestCategory=Integration'

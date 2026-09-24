@@ -1,22 +1,9 @@
-﻿using System;
+namespace PodcastAPI.Exceptions;
 
-namespace PodcastAPI.Exceptions
+public class ListenApiException : Exception
 {
-    public class ListenApiException : Exception
-    {
-        public ListenApiException()
-        {
-
-        }
-
-        public ListenApiException(string message) : base(message)
-        {
-
-        }
-
-        public ListenApiException(string message, Exception inner) : base(message, inner)
-        {
-
-        }
-    }
+    public ApiResponse? Response { get; internal set; }
+    public ListenApiException() { }
+    public ListenApiException(string message) : base(message) { }
+    public ListenApiException(string message, Exception inner) : base(message, inner) { }
 }
