@@ -33,6 +33,7 @@ internal static class MethodDispatch
         "getPodcastsByDomainName" => client.FetchPodcastsByDomain(parameters, token),
         "createPlaylist" => client.CreatePlaylist(parameters, token),
         "updatePlaylist" => client.UpdatePlaylist(parameters, token),
+        "deletePlaylist" => client.DeletePlaylist(parameters, token),
         "addPlaylistItem" => client.AddPlaylistItem(parameters, token),
         "deletePlaylistItem" => client.DeletePlaylistItem(parameters, token),
         "updatePlaylistItemNotes" => client.UpdatePlaylistItemNotes(parameters, token),

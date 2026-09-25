@@ -165,6 +165,12 @@ public sealed partial class Client
         Request("/playlists/{id}", HttpMethod.Put,
             new string[] { "id" }, new string[] {  }, parameters, cancellationToken);
 
+    // Delete a playlist. (DELETE /playlists/{id})
+    public Task<ApiResponse> DeletePlaylist(IDictionary<string, string>? parameters = null,
+        CancellationToken cancellationToken = default) =>
+        Request("/playlists/{id}", HttpMethod.Delete,
+            new string[] { "id" }, new string[] {  }, parameters, cancellationToken);
+
     // Add an episode or podcast to a playlist. (POST /playlists/{id}/items)
     public Task<ApiResponse> AddPlaylistItem(IDictionary<string, string>? parameters = null,
         CancellationToken cancellationToken = default) =>

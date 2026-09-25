@@ -19,9 +19,11 @@ public class ClientTests
         if (expected is not null) Assert.AreEqual(expected, Environment.Version.Major.ToString());
     }
 
-    internal static readonly JsonElement[] Operations = JsonDocument.Parse(
+    private static readonly JsonElement Contract = JsonDocument.Parse(
         File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "api-contract.json")))
-        .RootElement.GetProperty("operations").EnumerateArray().Select(op => op.Clone()).ToArray();
+        .RootElement;
+    internal static readonly JsonElement[] Operations = Contract.GetProperty("operations")
+        .EnumerateArray().Select(op => op.Clone()).ToArray();
 
     public static IEnumerable<object[]> OperationCases => Operations.Select(op => new object[] { op.GetProperty("operationId").GetString()! });
 
@@ -76,7 +78,7 @@ public class ClientTests
             CollectionAssert.AreEquivalent(query.ToArray(), Decode(request.RequestUri.Query).ToArray());
             CollectionAssert.AreEquivalent(body.ToArray(), Decode(request.Content is null ? null : await request.Content.ReadAsStringAsync(token)).ToArray());
             Assert.AreEqual("fixture-key", request.Headers.GetValues("X-ListenAPI-Key").Single());
-            Assert.AreEqual("podcast-api-dotnet 3.0.0", request.Headers.UserAgent.ToString());
+            Assert.AreEqual("podcast-api-dotnet " + Contract.GetProperty("version").GetString(), request.Headers.UserAgent.ToString());
             Assert.AreEqual("application/json", request.Headers.Accept.Single().MediaType);
             if (request.Method == HttpMethod.Post || request.Method == HttpMethod.Put)
                 Assert.AreEqual("application/x-www-form-urlencoded", request.Content!.Headers.ContentType!.MediaType);
@@ -89,6 +91,33 @@ public class ClientTests
         Assert.IsTrue(response.ToJSON<dynamic>()!.ok.Value);
         Assert.AreEqual(op.GetProperty("method").GetString() == "POST" ? 201 : 200, (int)response.StatusCode);
         CollectionAssert.AreEquivalent(before.ToArray(), parameters.ToArray());
+        Assert.AreEqual(1, handler.Calls);
+    }
+
+    [TestMethod]
+    public async Task DeletePlaylistEncodesItsIdentifierWithoutQueryOrBody()
+    {
+        const string id = "a/b ?#%é";
+        var parameters = new Dictionary<string, string> { ["id"] = id };
+        using var handler = new Handler((request, _) =>
+        {
+            Assert.AreEqual(HttpMethod.Delete, request.Method);
+            Assert.AreEqual("/api/v2/playlists/a%2Fb%20%3F%23%25%C3%A9", request.RequestUri!.AbsolutePath);
+            Assert.AreEqual("", request.RequestUri.Query);
+            Assert.IsNull(request.Content);
+            var response = Response(200, "{\"id\":\"a/b ?#%é\",\"deleted\":true}");
+            response.Headers.Add("X-ListenAPI-Usage", "12");
+            return Task.FromResult(response);
+        });
+        using var http = new HttpClient(handler);
+        using var client = new Client(httpClient: http);
+        var response = await client.DeletePlaylist(parameters);
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        Assert.AreEqual(id, (string)response.ToJSON<dynamic>()!.id);
+        Assert.AreEqual(true, (bool)response.ToJSON<dynamic>()!.deleted);
+        Assert.AreEqual(12, response.GetUsage());
+        Assert.AreEqual(id, parameters["id"]);
+        Assert.AreEqual(1, parameters.Count);
         Assert.AreEqual(1, handler.Calls);
     }
 
@@ -152,17 +181,31 @@ public class ClientTests
     [DataRow(500, typeof(ListenApiException))]
     [DataRow(503, typeof(ListenApiException))]
     [DataRow(302, typeof(ListenApiException))]
+    [DataRow(307, typeof(ListenApiException))]
+    [DataRow(308, typeof(ListenApiException))]
     [DataRow(422, typeof(ListenApiException))]
     public async Task HttpErrorsRetainResponseWithoutRetries(int status, Type type)
     {
-        using var handler = new Handler((_, _) => Task.FromResult(Response(status, "{\"error\":\"episode not found\"}")));
+        using var handler = new Handler((_, _) =>
+        {
+            var response = Response(status, "{\"error\":\"Exact reason\"}");
+            response.Headers.Add("X-ListenAPI-Usage", "123");
+            return Task.FromResult(response);
+        });
         using var http = new HttpClient(handler);
         using var client = new Client(httpClient: http);
-        var error = await Assert.ThrowsAsync<ListenApiException>(() => client.CreatePlaylist(new Dictionary<string, string> { ["name"] = "test" }));
-        Assert.AreEqual(type, error.GetType());
-        Assert.AreEqual(status, (int)error.Response!.StatusCode);
-        Assert.AreEqual("episode not found", (string)error.Response.ToJSON<dynamic>()!.error);
-        Assert.AreEqual(1, handler.Calls);
+        foreach (var operation in new[] { "createPlaylist", "deletePlaylist" })
+        {
+            var parameters = operation == "createPlaylist"
+                ? new Dictionary<string, string> { ["name"] = "test" }
+                : new Dictionary<string, string> { ["id"] = "playlist" };
+            var error = await Assert.ThrowsAsync<ListenApiException>(() => MethodDispatch.Call(operation, client, parameters));
+            Assert.AreEqual(type, error.GetType());
+            Assert.AreEqual(status, (int)error.Response!.StatusCode);
+            Assert.AreEqual("Exact reason", (string)error.Response.ToJSON<dynamic>()!.error);
+            Assert.AreEqual(123, error.Response.GetUsage());
+        }
+        Assert.AreEqual(2, handler.Calls);
     }
 
     [TestMethod]
@@ -227,7 +270,12 @@ public class ClientTests
         using var http = new HttpClient(handler);
         using var client = new Client(httpClient: http);
         foreach (var value in new[] { "", " ", ".", ".." })
+        {
             await Assert.ThrowsExactlyAsync<ArgumentException>(() => client.FetchPlaylistById(new Dictionary<string, string> { ["id"] = value }));
+            await Assert.ThrowsExactlyAsync<ArgumentException>(() => client.DeletePlaylist(new Dictionary<string, string> { ["id"] = value }));
+        }
+        await Assert.ThrowsExactlyAsync<ArgumentException>(() => client.DeletePlaylist());
+        await Assert.ThrowsExactlyAsync<ArgumentException>(() => client.DeletePlaylist(new Dictionary<string, string>()));
         await Assert.ThrowsExactlyAsync<ArgumentException>(() => client.DeletePlaylistItem(new Dictionary<string, string> { ["id"] = "playlist" }));
         Assert.AreEqual(0, handler.Calls);
         Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new Client(timeout: TimeSpan.Zero));
@@ -236,29 +284,40 @@ public class ClientTests
     }
 
     [TestMethod]
-    public async Task CancellationTimeoutAndConnectionFailureAreDistinct()
+    [DataRow("getLanguages")]
+    [DataRow("deletePlaylist")]
+    public async Task CancellationTimeoutAndConnectionFailureAreDistinct(string operation)
     {
+        var parameters = operation == "deletePlaylist"
+            ? new Dictionary<string, string> { ["id"] = "playlist" } : new Dictionary<string, string>();
         using var handler = new Handler(async (_, token) => { await Task.Delay(System.Threading.Timeout.Infinite, token); return Response(); });
         using var http = new HttpClient(handler);
         using var client = new Client(httpClient: http, timeout: TimeSpan.FromMilliseconds(50));
-        var timeout = await Assert.ThrowsExactlyAsync<ApiConnectionException>(() => client.FetchPodcastLanguages());
+        var timeout = await Assert.ThrowsExactlyAsync<ApiConnectionException>(() => MethodDispatch.Call(operation, client, parameters));
         Assert.IsNull(timeout.Response);
+        Assert.AreEqual(1, handler.Calls);
         using var cancel = new CancellationTokenSource();
         cancel.Cancel();
-        await Assert.ThrowsAsync<OperationCanceledException>(() => client.FetchPodcastLanguages(cancellationToken: cancel.Token));
+        await Assert.ThrowsAsync<OperationCanceledException>(() => MethodDispatch.Call(operation, client, parameters, cancel.Token));
+        Assert.AreEqual(1, handler.Calls);
         using var inFlight = new CancellationTokenSource(TimeSpan.FromMilliseconds(25));
         using var slower = new Client(httpClient: http, timeout: TimeSpan.FromSeconds(10));
-        await Assert.ThrowsAsync<OperationCanceledException>(() => slower.FetchPodcastLanguages(cancellationToken: inFlight.Token));
+        await Assert.ThrowsAsync<OperationCanceledException>(() => MethodDispatch.Call(operation, slower, parameters, inFlight.Token));
+        Assert.AreEqual(2, handler.Calls);
         using var failed = new Handler((_, _) => throw new HttpRequestException("must not leak a secret request URI"));
         using var failedHttp = new HttpClient(failed);
         using var disconnected = new Client(httpClient: failedHttp);
-        var error = await Assert.ThrowsExactlyAsync<ApiConnectionException>(() => disconnected.FetchPodcastLanguages());
+        var error = await Assert.ThrowsExactlyAsync<ApiConnectionException>(() => MethodDispatch.Call(operation, disconnected, parameters));
         Assert.IsFalse(error.ToString().Contains("secret request URI", StringComparison.Ordinal));
         Assert.AreEqual(1, failed.Calls);
     }
 
     [TestMethod]
-    public async Task DefaultTransportDoesNotFollowRedirects()
+    [DataRow("getLanguages", 302)]
+    [DataRow("deletePlaylist", 302)]
+    [DataRow("deletePlaylist", 307)]
+    [DataRow("deletePlaylist", 308)]
+    public async Task DefaultTransportDoesNotFollowRedirects(string operation, int status)
     {
         using var listener = new TcpListener(IPAddress.Loopback, 0);
         listener.Start();
@@ -269,13 +328,18 @@ public class ClientTests
             using var connection = await listener.AcceptTcpClientAsync(deadline.Token);
             await using var stream = connection.GetStream();
             using var reader = new StreamReader(stream, leaveOpen: true);
+            var expectedRequest = operation == "deletePlaylist"
+                ? "DELETE /api/v2/playlists/playlist HTTP/1.1" : "GET /api/v2/languages HTTP/1.1";
+            Assert.AreEqual(expectedRequest, await reader.ReadLineAsync(deadline.Token));
             while (!string.IsNullOrEmpty(await reader.ReadLineAsync(deadline.Token))) { }
-            var response = Encoding.ASCII.GetBytes($"HTTP/1.1 302 Found\r\nLocation: http://127.0.0.1:{port}/redirected\r\nContent-Length: 2\r\nConnection: close\r\n\r\n{{}}");
+            var response = Encoding.ASCII.GetBytes($"HTTP/1.1 {status} Redirect\r\nLocation: http://127.0.0.1:{port}/redirected\r\nContent-Length: 2\r\nConnection: close\r\n\r\n{{}}");
             await stream.WriteAsync(response, deadline.Token);
         }, deadline.Token);
         using var client = new Client("fixture-key", baseUrl: new Uri($"http://127.0.0.1:{port}/api/v2"));
-        var error = await Assert.ThrowsExactlyAsync<ListenApiException>(() => client.FetchPodcastLanguages(cancellationToken: deadline.Token));
-        Assert.AreEqual(302, (int)error.Response!.StatusCode);
+        var parameters = operation == "deletePlaylist"
+            ? new Dictionary<string, string> { ["id"] = "playlist" } : new Dictionary<string, string>();
+        var error = await Assert.ThrowsExactlyAsync<ListenApiException>(() => MethodDispatch.Call(operation, client, parameters, deadline.Token));
+        Assert.AreEqual(status, (int)error.Response!.StatusCode);
         await server;
         Assert.IsFalse(listener.Pending());
     }

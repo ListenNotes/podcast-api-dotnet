@@ -82,7 +82,8 @@ See the runnable [sample application](src/SampleApp/Sample.cs).
 ### Migrating from 1.x
 
 - Requires .NET 8+. The 25 existing public method names and parameter-dictionary
-  calling convention remain. Five playlist write methods are added.
+  calling convention remain. Six playlist write methods are available in 3.1.0,
+  including permanent playlist deletion.
 - RestSharp has been removed. The public `client.restClient` and
   `response.response` fields are removed; use constructor transport options and
   `response.StatusCode` / `response.Headers` instead. `ApiResponse`'s constructor
@@ -91,7 +92,7 @@ See the runnable [sample application](src/SampleApp/Sample.cs).
   no longer loses its path identifiers. Dispose the SDK client when finished.
 - Every non-2xx status now throws, including 403 and redirects. SDK exceptions
   share `ListenApiException` as their base. Redirects are not followed by the
-  default transport, and the user agent is `podcast-api-dotnet 3.0.0`.
+  default transport, and the user agent is `podcast-api-dotnet <version>`.
 
 ## Method index
 
@@ -124,6 +125,7 @@ See the runnable [sample application](src/SampleApp/Sample.cs).
 - [`FetchPodcastsByDomain`](#fetchpodcastsbydomain) — `GET /podcasts/domains/{domain_name}`
 - [`CreatePlaylist`](#createplaylist) — `POST /playlists`
 - [`UpdatePlaylist`](#updateplaylist) — `PUT /playlists/{id}`
+- [`DeletePlaylist`](#deleteplaylist) — `DELETE /playlists/{id}`
 - [`AddPlaylistItem`](#addplaylistitem) — `POST /playlists/{id}/items`
 - [`DeletePlaylistItem`](#deleteplaylistitem) — `DELETE /playlists/{id}/items/{item_id}`
 - [`UpdatePlaylistItemNotes`](#updateplaylistitemnotes) — `PUT /playlists/{id}/items/{item_id}`
@@ -838,6 +840,33 @@ Console.WriteLine(response.ToJSON<dynamic>());
 
 [Full API documentation](https://www.listennotes.com/api/docs/#put-api-v2-playlists-id)
 
+### DeletePlaylist
+
+Delete a playlist.
+
+`DELETE /playlists/{id}`
+
+Permanently delete a playlist, including all episode and podcast references saved in this specific playlist and their notes. The actual episodes and podcasts remain in the Listen Notes podcast database.
+
+**Warning: Deletion cannot be undone. Once deleted, the playlist is gone, regardless of how many episodes or podcasts it contains. You, the developer, are responsible for adding a confirmation step in your app's UI before calling this endpoint to prevent accidental deletion.**
+
+Only playlists owned by your admin API account can be modified; contributor membership does not grant write access.
+
+```csharp
+using System;
+using System.Collections.Generic;
+
+using var client = new PodcastAPI.Client(Environment.GetEnvironmentVariable("LISTEN_API_KEY"));
+var parameters = new Dictionary<string, string>
+{
+    ["id"] = "m1pe7z60bsw",
+};
+var response = await client.DeletePlaylist(parameters);
+Console.WriteLine(response.ToJSON<dynamic>());
+```
+
+[Full API documentation](https://www.listennotes.com/api/docs/#delete-api-v2-playlists-id)
+
 ### AddPlaylistItem
 
 Add an episode or podcast to a playlist.
@@ -944,7 +973,7 @@ LISTEN_API_MOCK_INTEGRATION=1 dotnet test src/PodcastAPI.Tests --filter 'TestCat
 ```
 
 It calls only `https://listen-api-test.listennotes.com/api/v2` with no API key,
-including all five playlist writes. It never reads credentials from the environment
+including all six playlist writes. It never reads credentials from the environment
 or permits a destination override. The mock does not prove persistence or production
 permissions. CI runs these checks separately from offline tests.
 
