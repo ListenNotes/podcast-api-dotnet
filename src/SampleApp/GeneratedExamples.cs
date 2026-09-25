@@ -342,6 +342,17 @@ internal static class GeneratedExamples
         Console.WriteLine(response.ToJSON<dynamic>());
     }
 
+    public static async Task DeletePlaylist()
+    {
+        using var client = new PodcastAPI.Client(Environment.GetEnvironmentVariable("LISTEN_API_KEY"));
+        var parameters = new Dictionary<string, string>
+        {
+            ["id"] = "m1pe7z60bsw",
+        };
+        var response = await client.DeletePlaylist(parameters);
+        Console.WriteLine(response.ToJSON<dynamic>());
+    }
+
     public static async Task AddPlaylistItem()
     {
         using var client = new PodcastAPI.Client(Environment.GetEnvironmentVariable("LISTEN_API_KEY"));

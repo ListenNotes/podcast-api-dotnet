@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>3.0.0</Version>
+    <Version>3.1.0</Version>
     <PackageId>PodcastAPI</PackageId>
     <Description>The official .NET library for the Listen Notes Podcast API.</Description>
     <Authors>Listen Notes, Inc.</Authors>
@@ -15,7 +15,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Copyright>Listen Notes, Inc.</Copyright>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>Playlist writes, generated API methods, HttpClient transport, cancellation, and .NET 8+ support. See README for migration details.</PackageReleaseNotes>
+    <PackageReleaseNotes>Add DeletePlaylist for permanent playlist deletion, with cancellation support. Deletion cannot be undone; add a confirmation step in your application's UI before calling it. See README for usage.</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

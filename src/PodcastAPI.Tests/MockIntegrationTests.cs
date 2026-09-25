@@ -17,6 +17,7 @@ public class MockIntegrationTests
         // No environment API key or base URL; redirects are disabled by Client.
         using var client = new Client();
         Assert.AreEqual("https://listen-api-test.listennotes.com/api/v2/", client.BaseUrl.AbsoluteUri);
+        Assert.AreEqual(31, ClientTests.Operations.Length);
         foreach (var op in ClientTests.Operations)
         {
             var operation = op.GetProperty("operationId").GetString()!;
@@ -26,6 +27,12 @@ public class MockIntegrationTests
             Assert.IsNotNull(json, operation);
             Assert.IsTrue(json.Count > 0, operation);
             if (operation == "deletePlaylistItem") Assert.AreEqual(true, (bool?)json["deleted"], operation);
+            if (operation == "deletePlaylist")
+            {
+                Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
+                Assert.AreEqual(true, (bool?)json["deleted"]);
+                Assert.AreEqual(ClientTests.Examples(op)["id"], (string?)json["id"]);
+            }
             if (operation is "createPlaylist" or "updatePlaylist" or "addPlaylistItem" or "updatePlaylistItemNotes")
                 Assert.IsNotNull(json["id"], operation);
         }

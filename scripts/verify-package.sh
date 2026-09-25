@@ -53,12 +53,27 @@ var response = await client.UpdatePlaylistItemNotes(new Dictionary<string, strin
 });
 if (response.StatusCode != HttpStatusCode.OK || (int)response.ToJSON<dynamic>()!.id != 23)
     throw new Exception("Packaged response did not deserialize");
+var deleted = await client.DeletePlaylist(new Dictionary<string, string> { ["id"] = "playlist/encoded" });
+if (deleted.StatusCode != HttpStatusCode.OK || !(bool)deleted.ToJSON<dynamic>()!.deleted ||
+    (string)deleted.ToJSON<dynamic>()!.id != "playlist/encoded")
+    throw new Exception("Packaged deletion response did not deserialize");
 Console.WriteLine("Packaged SDK and all README examples verified without API requests.");
 
 sealed class OfflineHandler : HttpMessageHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken token)
     {
+        if (request.Method == HttpMethod.Delete)
+        {
+            if (request.RequestUri!.AbsolutePath != "/api/v2/playlists/playlist%2Fencoded" ||
+                request.RequestUri.Query != "" || request.Content is not null ||
+                request.Headers.Contains("X-ListenAPI-Key"))
+                throw new Exception("Packaged deletion request contract mismatch");
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("{\"id\":\"playlist/encoded\",\"deleted\":true}"),
+            };
+        }
         if (request.Method != HttpMethod.Put ||
             request.RequestUri!.AbsolutePath != "/api/v2/playlists/playlist%2Fencoded/items/23" ||
             request.Headers.Contains("X-ListenAPI-Key") ||
