@@ -15,6 +15,8 @@ jobs:
       matrix:
         dotnet: ['8.0.x', '10.0.x']
     env:
+      # Limit roll-forward to runtimes installed for this matrix job.
+      DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
       DOTNET_ROLL_FORWARD: ${{ matrix.dotnet == '10.0.x' && 'LatestMajor' || 'LatestPatch' }}
       LISTEN_API_TEST_RUNTIME: ${{ matrix.dotnet == '10.0.x' && '10' || '8' }}
     steps:
@@ -29,6 +31,7 @@ jobs:
   mock-integration:
     runs-on: ubuntu-latest
     env:
+      DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
       DOTNET_ROLL_FORWARD: LatestMajor
       LISTEN_API_MOCK_INTEGRATION: '1'
     steps:
