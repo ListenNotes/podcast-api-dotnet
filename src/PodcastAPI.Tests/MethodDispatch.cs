@@ -37,6 +37,10 @@ internal static class MethodDispatch
         "addPlaylistItem" => client.AddPlaylistItem(parameters, token),
         "deletePlaylistItem" => client.DeletePlaylistItem(parameters, token),
         "updatePlaylistItemNotes" => client.UpdatePlaylistItemNotes(parameters, token),
+        "estimateEpisodeTranscription" => client.EstimateEpisodeTranscription(parameters, token),
+        "transcribeEpisode" => client.TranscribeEpisode(parameters, token),
+        "getEpisodeTranscript" => client.GetEpisodeTranscript(parameters, token),
+        "listTranscripts" => client.ListTranscripts(parameters, token),
         _ => throw new ArgumentException("Unknown operation", nameof(operation)),
     };
 }

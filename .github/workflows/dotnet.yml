@@ -20,6 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
+        env:
+          # Isolate the selected runtime from the runner's preinstalled versions.
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
         with:
           dotnet-version: ${{ matrix.dotnet }}
       - run: dotnet restore src/PodcastAPI.net.sln --locked-mode
@@ -34,6 +37,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
+        env:
+          # Isolate the selected runtime from the runner's preinstalled versions.
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
         with:
           dotnet-version: '10.0.x'
       - run: dotnet restore src/PodcastAPI.net.sln --locked-mode
