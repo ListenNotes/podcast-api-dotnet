@@ -189,4 +189,28 @@ public sealed partial class Client
         Request("/playlists/{id}/items/{item_id}", HttpMethod.Put,
             new string[] { "id", "item_id" }, new string[] {  }, parameters, cancellationToken);
 
+    // Estimate episode transcription cost (GET /episodes/{id}/transcript/estimate)
+    public Task<ApiResponse> EstimateEpisodeTranscription(IDictionary<string, string>? parameters = null,
+        CancellationToken cancellationToken = default) =>
+        Request("/episodes/{id}/transcript/estimate", HttpMethod.Get,
+            new string[] { "id" }, new string[] {  }, parameters, cancellationToken);
+
+    // Request episode transcription (POST /episodes/{id}/transcript)
+    public Task<ApiResponse> TranscribeEpisode(IDictionary<string, string>? parameters = null,
+        CancellationToken cancellationToken = default) =>
+        Request("/episodes/{id}/transcript", HttpMethod.Post,
+            new string[] { "id" }, new string[] {  }, parameters, cancellationToken);
+
+    // Get episode transcription status and downloads (GET /episodes/{id}/transcript)
+    public Task<ApiResponse> GetEpisodeTranscript(IDictionary<string, string>? parameters = null,
+        CancellationToken cancellationToken = default) =>
+        Request("/episodes/{id}/transcript", HttpMethod.Get,
+            new string[] { "id" }, new string[] {  }, parameters, cancellationToken);
+
+    // List completed episode transcripts (GET /transcripts)
+    public Task<ApiResponse> ListTranscripts(IDictionary<string, string>? parameters = null,
+        CancellationToken cancellationToken = default) =>
+        Request("/transcripts", HttpMethod.Get,
+            new string[] {  }, new string[] { "limit", "cursor" }, parameters, cancellationToken);
+
 }

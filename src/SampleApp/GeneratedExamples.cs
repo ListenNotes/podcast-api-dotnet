@@ -391,4 +391,48 @@ internal static class GeneratedExamples
         Console.WriteLine(response.ToJSON<dynamic>());
     }
 
+    public static async Task EstimateEpisodeTranscription()
+    {
+        using var client = new PodcastAPI.Client(Environment.GetEnvironmentVariable("LISTEN_API_KEY"));
+        var parameters = new Dictionary<string, string>
+        {
+            ["id"] = "dc09fd798802477b8dba0ca1e10134fa",
+        };
+        var response = await client.EstimateEpisodeTranscription(parameters);
+        Console.WriteLine(response.ToJSON<dynamic>());
+    }
+
+    public static async Task TranscribeEpisode()
+    {
+        using var client = new PodcastAPI.Client(null);
+        var parameters = new Dictionary<string, string>
+        {
+            ["id"] = "1871d978bdc648588441bc5649857ddb",
+        };
+        var response = await client.TranscribeEpisode(parameters);
+        Console.WriteLine(response.ToJSON<dynamic>());
+    }
+
+    public static async Task GetEpisodeTranscript()
+    {
+        using var client = new PodcastAPI.Client(Environment.GetEnvironmentVariable("LISTEN_API_KEY"));
+        var parameters = new Dictionary<string, string>
+        {
+            ["id"] = "1871d978bdc648588441bc5649857ddb",
+        };
+        var response = await client.GetEpisodeTranscript(parameters);
+        Console.WriteLine(response.ToJSON<dynamic>());
+    }
+
+    public static async Task ListTranscripts()
+    {
+        using var client = new PodcastAPI.Client(Environment.GetEnvironmentVariable("LISTEN_API_KEY"));
+        var parameters = new Dictionary<string, string>
+        {
+            ["limit"] = "20",
+        };
+        var response = await client.ListTranscripts(parameters);
+        Console.WriteLine(response.ToJSON<dynamic>());
+    }
+
 }
